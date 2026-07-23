@@ -36,8 +36,8 @@ export default function Footer() {
           <h4 className="font-semibold text-text-primary mb-4">Legal</h4>
           <ul className="flex flex-col gap-2">
             <li><Link href="/contact" className="text-text-muted hover:text-primary text-sm transition-colors">Contact Us</Link></li>
-            <li><span className="text-text-muted text-sm">Terms of Service</span></li>
-            <li><span className="text-text-muted text-sm">Privacy Policy</span></li>
+            <li><Link href="/terms" className="text-text-muted hover:text-primary text-sm transition-colors">Terms of Service</Link></li>
+            <li><Link href="/privacy" className="text-text-muted hover:text-primary text-sm transition-colors">Privacy Policy</Link></li>
           </ul>
         </div>
       </div>

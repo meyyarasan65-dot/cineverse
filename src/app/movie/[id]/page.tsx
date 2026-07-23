@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Star, Clock, Calendar } from 'lucide-react';
 import MovieCard from '@/components/movie/MovieCard';
 import MovieActions from '@/components/movie/MovieActions';
+import MovieReviews from '@/components/movie/MovieReviews';
 import { getMovie } from '@/lib/tmdb';
 import { notFound } from 'next/navigation';
 
@@ -127,6 +128,9 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
             </div>
           </div>
         )}
+
+        {/* Reviews */}
+        <MovieReviews movieId={movie.id} />
       </div>
     </div>
   );

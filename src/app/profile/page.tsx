@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { getMovieDetailsAction } from '@/app/actions';
 import MovieCard from '@/components/movie/MovieCard';
 import UserListModal from '@/components/profile/UserListModal';
-import { Film, Heart, Bookmark, Check, Loader2, Users } from 'lucide-react';
+import { Film, Heart, Bookmark, Check, Loader2, Users, MessageSquare, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -15,12 +15,13 @@ export default function ProfilePage() {
   const [watchlist, setWatchlist] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<any[]>([]);
   const [watched, setWatched] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'watchlist' | 'favorites' | 'watched'>('watchlist');
+  const [activeTab, setActiveTab] = useState<'watchlist' | 'favorites' | 'watched' | 'reviews'>('watchlist');
   const [searchUser, setSearchUser] = useState("");
   
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,10 +38,11 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const [watchlistRes, favoritesRes, watchedRes, followersRes, followingRes] = await Promise.all([
+        const [watchlistRes, favoritesRes, watchedRes, reviewsRes, followersRes, followingRes] = await Promise.all([
           supabase.from('watchlist').select('movie_id').eq('user_id', user.id).order('added_at', { ascending: false }),
           supabase.from('favorites').select('movie_id').eq('user_id', user.id).order('added_at', { ascending: false }),
           supabase.from('recently_watched').select('movie_id').eq('user_id', user.id).order('watched_at', { ascending: false }),
+          supabase.from('reviews').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           supabase.from('follows').select('follower_id', { count: 'exact' }).eq('following_id', user.id),
           supabase.from('follows').select('following_id', { count: 'exact' }).eq('follower_id', user.id)
         ]);
@@ -64,6 +66,16 @@ export default function ProfilePage() {
             watchedRes.data.map(async (item) => getMovieDetailsAction(item.movie_id.toString()))
           );
           setWatched(movies.filter(Boolean));
+        }
+
+        if (reviewsRes.data) {
+          const enrichedReviews = await Promise.all(
+            reviewsRes.data.map(async (review) => {
+              const movie = await getMovieDetailsAction(review.movie_id.toString());
+              return { ...review, movie };
+            })
+          );
+          setReviews(enrichedReviews.filter(r => r.movie));
         }
 
         setFollowers(followersRes.count || 0);
@@ -187,37 +199,101 @@ export default function ProfilePage() {
         >
           <Check className="w-5 h-5" /> Watched ({watched.length})
         </button>
+        <button 
+          onClick={() => setActiveTab('reviews')}
+          className={`pb-4 text-lg font-semibold flex items-center gap-2 transition-colors whitespace-nowrap ${
+            activeTab === 'reviews' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-text-primary'
+          } -mb-[1px]`}
+        >
+          <MessageSquare className="w-5 h-5" /> Reviews ({reviews.length})
+        </button>
       </div>
 
-      {/* Movie Grid */}
-      {displayedMovies.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {displayedMovies.map((movie: any) => (
-            <MovieCard 
-              key={movie.id} 
-              id={movie.id}
-              title={movie.title || movie.name}
-              posterPath={movie.poster_path}
-              releaseYear={movie.release_date?.split('-')[0] || movie.first_air_date?.split('-')[0]}
-              rating={movie.vote_average}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center text-text-muted mb-4">
-            {activeTab === 'watchlist' ? <Bookmark className="w-8 h-8" /> : activeTab === 'favorites' ? <Heart className="w-8 h-8" /> : <Check className="w-8 h-8" />}
+      {/* Tab Content */}
+      {activeTab === 'reviews' ? (
+        reviews.length > 0 ? (
+          <div className="flex flex-col gap-6 max-w-4xl">
+            {reviews.map((review: any) => (
+              <div key={review.id} className="bg-surface border border-border-subtle rounded-xl p-6 flex flex-col md:flex-row gap-6">
+                <Link href={`/movie/${review.movie_id}`} className="shrink-0 w-24 md:w-32 aspect-[2/3] bg-canvas rounded-md overflow-hidden relative border border-border-subtle hover:border-primary transition-colors">
+                  {review.movie.poster_path ? (
+                    <img src={`https://image.tmdb.org/t/p/w200${review.movie.poster_path}`} alt={review.movie.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-text-muted text-xs">No Poster</div>
+                  )}
+                </Link>
+                <div className="flex flex-col flex-1 gap-3">
+                  <div>
+                    <Link href={`/movie/${review.movie_id}`} className="text-xl font-bold text-text-primary hover:text-primary transition-colors">
+                      {review.movie.title || review.movie.name}
+                    </Link>
+                    <div className="flex items-center gap-4 mt-2">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star 
+                            key={star} 
+                            className={`w-4 h-4 ${star <= review.rating ? "fill-primary text-primary" : "text-border-subtle"}`} 
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-text-muted">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                  {review.text && (
+                    <p className="text-text-muted leading-relaxed whitespace-pre-wrap mt-2 bg-canvas/50 p-4 rounded-md border border-border-subtle/50">
+                      {review.text}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-          <h2 className="text-xl font-semibold text-text-primary mb-2">
-            Your {activeTab} is empty
-          </h2>
-          <p className="text-text-muted max-w-md">
-            Start exploring movies and add them to your {activeTab} to keep track of what you love.
-          </p>
-          <Link href="/trending" className="mt-6 px-6 py-2 bg-surface border border-border-subtle text-text-primary font-medium rounded-md hover:border-primary transition-colors">
-            Discover Movies
-          </Link>
-        </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center text-text-muted mb-4">
+              <MessageSquare className="w-8 h-8" />
+            </div>
+            <h2 className="text-xl font-semibold text-text-primary mb-2">
+              No reviews yet
+            </h2>
+            <p className="text-text-muted max-w-md">
+              You haven't written any reviews.
+            </p>
+          </div>
+        )
+      ) : (
+        /* Movie Grid */
+        displayedMovies.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            {displayedMovies.map((movie: any) => (
+              <MovieCard 
+                key={movie.id} 
+                id={movie.id}
+                title={movie.title || movie.name}
+                posterPath={movie.poster_path}
+                releaseYear={movie.release_date?.split('-')[0] || movie.first_air_date?.split('-')[0]}
+                rating={movie.vote_average}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center text-text-muted mb-4">
+              {activeTab === 'watchlist' ? <Bookmark className="w-8 h-8" /> : activeTab === 'favorites' ? <Heart className="w-8 h-8" /> : <Check className="w-8 h-8" />}
+            </div>
+            <h2 className="text-xl font-semibold text-text-primary mb-2">
+              Your {activeTab} is empty
+            </h2>
+            <p className="text-text-muted max-w-md">
+              Start exploring movies and add them to your {activeTab} to keep track of what you love.
+            </p>
+            <Link href="/trending" className="mt-6 px-6 py-2 bg-surface border border-border-subtle text-text-primary font-medium rounded-md hover:border-primary transition-colors">
+              Discover Movies
+            </Link>
+          </div>
+        )
       )}
     </div>
   );
