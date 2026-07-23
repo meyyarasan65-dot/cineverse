@@ -34,9 +34,9 @@ export default function LoginPage() {
     <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] p-4">
       <div className="w-full max-w-md bg-surface border border-border-subtle rounded-xl p-8 shadow-xl">
         <div className="flex flex-col items-center mb-8">
-          <Film className="w-10 h-10 text-primary mb-4" />
-          <h1 className="text-2xl font-bold text-text-primary">Welcome back</h1>
-          <p className="text-text-muted text-sm mt-2">Log in to track your films</p>
+          <img src="/logo.png" alt="Frame Diary Logo" className="w-14 h-14 object-contain [clip-path:circle(48%_at_50%_50%)] mb-4" />
+          <h1 className="text-2xl font-bold text-text-primary">Welcome Back</h1>
+          <p className="text-text-muted text-sm mt-2">Log in to your account to continue</p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { supabase } from '@/lib/supabase';
 import { getMovieDetailsAction } from '@/app/actions';
 import MovieCard from '@/components/movie/MovieCard';
 import UserListModal from '@/components/profile/UserListModal';
-import { Film, Heart, Bookmark, Check, Loader2, Users, UserPlus, UserMinus, MessageSquare, Star } from 'lucide-react';
+import { Film, Heart, Bookmark, Check, Loader2, Users, UserPlus, UserMinus, MessageSquare, Star, BookOpen, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
@@ -28,6 +28,31 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<'watchlist' | 'favorites' | 'watched' | 'reviews'>('watchlist');
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  const checkArrows = () => {
+    if (tabsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkArrows();
+    window.addEventListener('resize', checkArrows);
+    return () => window.removeEventListener('resize', checkArrows);
+  }, [watchlist, favorites, watched, reviews]);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (tabsRef.current) {
+      const amount = direction === 'left' ? -200 : 200;
+      tabsRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const fetchPublicProfile = async () => {
@@ -87,8 +112,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
           setReviews(enrichedReviews.filter(r => r.movie));
         }
 
-        setFollowers(followersRes.count || 0);
-        setFollowing(followingRes.count || 0);
+        setFollowers(followersRes?.count || 0);
+        setFollowing(followingRes?.count || 0);
         setIsFollowing(!!isFollowingRes.data);
 
       } catch (err) {
@@ -199,15 +224,29 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
       />
 
       {/* Tabs */}
-      <div className="flex gap-6 border-b border-border-subtle mb-8 overflow-x-auto pb-1">
-        <button 
-          onClick={() => setActiveTab('watchlist')}
-          className={`pb-4 text-lg font-semibold flex items-center gap-2 transition-colors whitespace-nowrap ${
-            activeTab === 'watchlist' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-text-primary'
-          } -mb-[1px]`}
+      <div className="relative mb-8 group">
+        {showLeftArrow && (
+          <button 
+            onClick={() => scrollTabs('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 z-10 p-1.5 bg-surface border border-border-subtle rounded-full text-text-primary hover:text-primary hover:border-primary transition-all shadow-md opacity-0 group-hover:opacity-100 hidden md:flex"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+        )}
+        
+        <div 
+          ref={tabsRef}
+          onScroll={checkArrows}
+          className="flex gap-6 border-b border-border-subtle overflow-x-auto pb-1 hide-scrollbar"
         >
-          <Bookmark className="w-5 h-5" /> Watchlist ({watchlist.length})
-        </button>
+          <button 
+            onClick={() => setActiveTab('watchlist')}
+            className={`pb-4 text-lg font-semibold flex items-center gap-2 transition-colors whitespace-nowrap ${
+              activeTab === 'watchlist' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-text-primary'
+            } -mb-[1px]`}
+          >
+            <Bookmark className="w-5 h-5" /> Watchlist ({watchlist.length})
+          </button>
         <button 
           onClick={() => setActiveTab('favorites')}
           className={`pb-4 text-lg font-semibold flex items-center gap-2 transition-colors whitespace-nowrap ${
@@ -232,6 +271,16 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
         >
           <MessageSquare className="w-5 h-5" /> Reviews ({reviews.length})
         </button>
+        </div>
+        
+        {showRightArrow && (
+          <button 
+            onClick={() => scrollTabs('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 z-10 p-1.5 bg-surface border border-border-subtle rounded-full text-text-primary hover:text-primary hover:border-primary transition-all shadow-md opacity-0 group-hover:opacity-100 hidden md:flex"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Tab Content */}

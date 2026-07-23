@@ -4,6 +4,7 @@ import MovieCard from '@/components/movie/MovieCard';
 import MovieActions from '@/components/movie/MovieActions';
 import MovieReviews from '@/components/movie/MovieReviews';
 import GenreCarousel from '@/components/genres/GenreCarousel';
+import CastCarousel from '@/components/movie/CastCarousel';
 import { getMovie } from '@/lib/tmdb';
 import { notFound } from 'next/navigation';
 
@@ -96,6 +97,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
         {/* Actions */}
         <MovieActions 
           movieId={movie.id} 
+          movieTitle={movie.title || movie.name}
           trailerUrl={trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : undefined} 
         />
 
@@ -104,28 +106,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
         {movie.credits?.cast && movie.credits.cast.length > 0 && (
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-l-4 border-primary pl-3">Top Cast</h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
-               {movie.credits.cast.slice(0, 10).map((actor: any) => (
-                  <div key={actor.id} className="flex flex-col gap-2 shrink-0 snap-start w-32">
-                     <div className="w-32 h-32 rounded-full bg-surface border border-border-subtle overflow-hidden relative">
-                       {actor.profile_path ? (
-                         <Image 
-                           src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
-                           alt={actor.name}
-                           fill
-                           className="object-cover"
-                         />
-                       ) : (
-                         <div className="w-full h-full flex items-center justify-center bg-surface/50 text-xs text-text-muted text-center p-2">
-                           No Image
-                         </div>
-                       )}
-                     </div>
-                     <div className="text-sm font-semibold text-text-primary text-center truncate">{actor.name}</div>
-                     <div className="text-xs text-text-muted text-center truncate">{actor.character}</div>
-                  </div>
-               ))}
-            </div>
+            <CastCarousel cast={movie.credits.cast} />
           </div>
         )}
 

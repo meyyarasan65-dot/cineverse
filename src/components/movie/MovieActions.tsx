@@ -7,10 +7,11 @@ import { supabase } from '@/lib/supabase';
 
 interface MovieActionsProps {
   movieId: number;
+  movieTitle: string;
   trailerUrl?: string;
 }
 
-export default function MovieActions({ movieId, trailerUrl }: MovieActionsProps) {
+export default function MovieActions({ movieId, movieTitle, trailerUrl }: MovieActionsProps) {
   const { user } = useAuthStore();
   const [inWatchlist, setInWatchlist] = useState(false);
   const [inFavorites, setInFavorites] = useState(false);
