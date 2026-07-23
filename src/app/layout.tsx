@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Movie Universe",
+  title: "Frame Diary",
   description: "Track films you've watched. Save those you want to see. Tell your friends what's good.",
 };
 

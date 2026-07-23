@@ -25,7 +25,7 @@ export default function Footer() {
         
         {/* Brand */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-primary font-bold text-lg tracking-tight">Movie Universe</h3>
+          <h3 className="text-[#02d450] font-bold text-xl tracking-tight"><span className="text-white drop-shadow-md">FRAME</span>DIARY</h3>
           <p className="text-text-muted text-sm leading-relaxed">
             Discover. Watch. Review. Your personal Letterboxd-style movie discovery platform.
           </p>
@@ -62,7 +62,7 @@ export default function Footer() {
       
       <div className="container mx-auto px-4 mt-12 pt-8 border-t border-border-subtle/50 text-center">
         <p className="text-text-muted text-sm">
-          &copy; {new Date().getFullYear()} Movie Universe. Built with Next.js and Tailwind CSS.
+          &copy; {new Date().getFullYear()} Frame Diary. Built with Next.js and Tailwind CSS.
         </p>
       </div>
     </footer>

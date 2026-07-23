@@ -23,9 +23,9 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Film className="w-6 h-6 text-primary" />
-          <span className="font-bold text-xl tracking-tight text-text-primary">Movie<span className="text-primary">Universe</span></span>
+        <Link href="/" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
+          <img src="/logo.png" alt="Frame Diary Logo" className="w-14 h-14 object-contain [clip-path:circle(48%_at_50%_50%)]" />
+          <span className="font-bold text-2xl tracking-tight leading-none flex items-center -translate-y-[2px]"><span className="text-white drop-shadow-md">FRAME</span><span className="text-[#02d450]">DIARY</span></span>
         </Link>
 
         {/* Desktop Navigation */}
