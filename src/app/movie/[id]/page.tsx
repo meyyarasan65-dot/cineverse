@@ -3,6 +3,7 @@ import { Star, Clock, Calendar } from 'lucide-react';
 import MovieCard from '@/components/movie/MovieCard';
 import MovieActions from '@/components/movie/MovieActions';
 import MovieReviews from '@/components/movie/MovieReviews';
+import GenreCarousel from '@/components/genres/GenreCarousel';
 import { getMovie } from '@/lib/tmdb';
 import { notFound } from 'next/navigation';
 
@@ -49,11 +50,17 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
           </div>
           
           {/* Info */}
-          <div className="flex flex-col gap-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary tracking-tight">
+          <div className="flex flex-col gap-4 z-10 w-full max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary tracking-tight drop-shadow-lg">
               {movie.title || movie.name}
             </h1>
-            {movie.tagline && <p className="text-lg md:text-xl italic text-text-muted">{movie.tagline}</p>}
+            {movie.tagline && <p className="text-lg md:text-xl italic text-text-muted drop-shadow-md">{movie.tagline}</p>}
+            
+            {movie.overview && (
+              <p className="text-text-primary/90 text-sm md:text-base lg:text-lg leading-relaxed drop-shadow-md bg-surface/40 backdrop-blur-sm p-4 rounded-lg border border-border-subtle/50 mb-2">
+                {movie.overview}
+              </p>
+            )}
             
             <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-text-primary">
               <div className="flex items-center gap-1 bg-surface px-3 py-1 rounded-full border border-border-subtle">
@@ -92,13 +99,6 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
           trailerUrl={trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : undefined} 
         />
 
-        {/* Synopsis */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4 border-l-4 border-primary pl-3">Synopsis</h2>
-          <p className="text-text-muted text-lg leading-relaxed max-w-4xl">
-            {movie.overview || "No overview available."}
-          </p>
-        </div>
 
         {/* Cast */}
         {movie.credits?.cast && movie.credits.cast.length > 0 && (
@@ -125,6 +125,16 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                      <div className="text-xs text-text-muted text-center truncate">{actor.character}</div>
                   </div>
                ))}
+            </div>
+          </div>
+        )}
+
+        {/* Similar Movies */}
+        {movie.similar?.results && movie.similar.results.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-4 border-l-4 border-primary pl-3">Movies Like This</h2>
+            <div className="-mx-2">
+              <GenreCarousel movies={movie.similar.results.slice(0, 15)} />
             </div>
           </div>
         )}

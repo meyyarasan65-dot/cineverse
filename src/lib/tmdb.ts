@@ -22,7 +22,10 @@ export async function fetchFromTMDB(endpoint: string, options?: RequestInit) {
 }
 
 export async function getTrendingMovies(timeWindow: 'day' | 'week' = 'week') {
-  return fetchFromTMDB(`/trending/movie/${timeWindow}`);
+  if (timeWindow === 'day') {
+    return fetchFromTMDB(`/movie/now_playing`);
+  }
+  return fetchFromTMDB(`/trending/movie/week`);
 }
 
 export async function getMovie(id: string) {
@@ -31,4 +34,8 @@ export async function getMovie(id: string) {
 
 export async function getGenres() {
   return fetchFromTMDB(`/genre/movie/list`);
+}
+
+export async function getMoviesByGenre(genreId: string) {
+  return fetchFromTMDB(`/discover/movie?with_genres=${genreId}&sort_by=popularity.desc`);
 }

@@ -1,20 +1,40 @@
 @import "tailwindcss";
 
+:root {
+  /* Default Dark Mode Variables */
+  --canvas: #121417;
+  --surface: #1A1D23;
+  --primary: #00E054;
+  --text-primary: #F8F9FA;
+  --text-muted: #9CA3AF;
+  --border-subtle: #2D3748;
+}
+
+.light {
+  /* Light Mode Variables */
+  --canvas: #F8F9FA;
+  --surface: #FFFFFF;
+  --primary: #00C853;
+  --text-primary: #1A1D23;
+  --text-muted: #6B7280;
+  --border-subtle: #E5E7EB;
+}
+
 @theme inline {
-  --color-canvas: #121417;
-  --color-surface: #1A1D23;
-  --color-primary: #00E054;
-  --color-text-primary: #F8F9FA;
-  --color-text-muted: #9CA3AF;
-  --color-border-subtle: #2D3748;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 :root {
-  --background: var(--color-canvas);
-  --foreground: var(--color-text-primary);
+  --background: var(--canvas);
+  --foreground: var(--text-primary);
 }
 
 body {
@@ -23,4 +43,13 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar for elements with hide-scrollbar class */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

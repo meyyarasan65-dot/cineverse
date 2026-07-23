@@ -6,6 +6,7 @@ import { Film, User, LogOut, Menu, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import SearchBar from "@/components/layout/SearchBar";
 import NotificationsPanel from "@/components/layout/NotificationsPanel";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 export default function Navbar() {
   const { user, loading, signOut } = useAuthStore();
@@ -39,6 +40,7 @@ export default function Navbar() {
           <div className="hidden sm:block">
             <SearchBar />
           </div>
+          <ThemeToggle />
           <NotificationsPanel />
           
           {!loading && (

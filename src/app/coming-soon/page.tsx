@@ -2,7 +2,8 @@ import MovieCard from "@/components/movie/MovieCard";
 import { fetchFromTMDB } from "@/lib/tmdb";
 
 export default async function ComingSoonPage() {
-  const data = await fetchFromTMDB('/movie/upcoming');
+  const today = new Date().toISOString().split('T')[0];
+  const data = await fetchFromTMDB(`/discover/movie?primary_release_date.gte=${today}&sort_by=popularity.desc`);
   const movies = data.results || [];
 
   return (
