@@ -10,14 +10,14 @@ import NotificationsPanel from "@/components/layout/NotificationsPanel";
 export default function Navbar() {
   const { user, loading, signOut } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const handleLogout = async () => {
-    if (window.confirm("Are you sure you want to log out?")) {
-      await signOut();
-    }
+  const handleLogout = () => {
+    setShowLogoutModal(true);
   };
 
   return (
+    <>
     <nav className="sticky top-0 z-50 w-full border-b border-border-subtle bg-canvas/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         
@@ -125,5 +125,34 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+    
+    {/* Logout Confirmation Modal - Rendered outside nav to avoid backdrop-blur containment */}
+    {showLogoutModal && (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="bg-surface border border-border-subtle rounded-xl p-6 w-full max-w-sm shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
+          <h3 className="text-xl font-bold text-text-primary">Confirm Logout</h3>
+          <p className="text-text-muted">Are you sure you want to log out of your account?</p>
+          <div className="flex justify-end gap-3 mt-4">
+            <button 
+              onClick={() => setShowLogoutModal(false)}
+              className="px-4 py-2 text-sm font-medium text-text-primary bg-canvas border border-border-subtle rounded-md hover:bg-canvas/80 transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={async () => {
+                setShowLogoutModal(false);
+                await signOut();
+              }}
+              className="px-4 py-2 text-sm font-medium text-canvas bg-red-500 rounded-md hover:bg-red-600 transition-colors flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
