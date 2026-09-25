@@ -12,3 +12,13 @@ export async function getMovieDetailsAction(id: string) {
     return null;
   }
 }
+
+export async function getMoviesByGenreAction(genreId: string, page: number = 1) {
+  try {
+    const data = await fetchFromTMDB(`/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&page=${page}`);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch genre movies:", error);
+    return { results: [] };
+  }
+}

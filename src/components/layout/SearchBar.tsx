@@ -80,7 +80,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div ref={wrapperRef} className="relative hidden md:block z-50">
+    <div ref={wrapperRef} className="relative z-50 w-full md:w-auto">
       <form
         onSubmit={handleSubmit}
         className="flex items-center bg-surface border border-border-subtle rounded-full px-3 py-1.5 focus-within:border-primary transition-colors"
@@ -89,7 +89,7 @@ export default function SearchBar() {
         <input
           type="text"
           placeholder="Search movies & users..."
-          className="bg-transparent border-none outline-none text-sm text-text-primary placeholder:text-text-muted ml-2 w-48 focus:w-64 transition-all"
+          className="bg-transparent border-none outline-none text-sm text-text-primary placeholder:text-text-muted ml-2 w-full md:w-48 md:focus:w-64 transition-all"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

@@ -19,13 +19,13 @@ export default function Navbar() {
 
   return (
     <>
-    <nav className="sticky top-0 z-50 w-full border-b border-border-subtle bg-canvas/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-border-subtle bg-surface/70 backdrop-blur-xl shadow-sm transition-all duration-300">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
           <img src="/logo.png" alt="Frame Diary Logo" className="w-14 h-14 object-contain [clip-path:circle(48%_at_50%_50%)]" />
-          <span className="font-bold text-2xl tracking-tight leading-none flex items-center -translate-y-[2px]"><span className="text-white drop-shadow-md">FRAME</span><span className="text-[#02d450]">DIARY</span></span>
+          <span className="font-bold text-2xl tracking-tight leading-none flex items-center -translate-y-[2px]"><span className="text-text-primary drop-shadow-sm">FRAME</span><span className="text-[#02d450]">DIARY</span></span>
         </Link>
 
         {/* Desktop Navigation */}

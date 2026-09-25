@@ -1,4 +1,4 @@
-import MovieCard from "@/components/movie/MovieCard";
+import GenreMovieList from "@/components/genres/GenreMovieList";
 import { fetchFromTMDB, getGenres } from "@/lib/tmdb";
 
 export default async function GenreDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -20,18 +20,7 @@ export default async function GenreDetailsPage({ params }: { params: Promise<{ i
         <p className="text-text-muted">Explore the best {genreName.toLowerCase()} movies.</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-        {movies.map((movie: any) => (
-          <MovieCard 
-            key={movie.id} 
-            id={movie.id}
-            title={movie.title || movie.name}
-            posterPath={movie.poster_path}
-            releaseYear={movie.release_date?.split('-')[0] || movie.first_air_date?.split('-')[0]}
-            rating={movie.vote_average}
-          />
-        ))}
-      </div>
+      <GenreMovieList initialMovies={movies} genreId={resolvedParams.id} />
     </div>
   );
 }
