@@ -1,6 +1,6 @@
 "use server";
 
-import { getMovie } from "@/lib/tmdb";
+import { getMovie, fetchFromTMDB } from "@/lib/tmdb";
 
 // Server action to fetch movie details safely from client components
 export async function getMovieDetailsAction(id: string) {
