@@ -73,6 +73,12 @@ export default function MovieActions({ movieId, movieTitle, trailerUrl }: MovieA
     setInWatched(!inWatched); // Optimistic UI
     if (!inWatched) {
       await supabase.from('recently_watched').insert({ user_id: user.id, movie_id: movieId });
+      
+      // Auto-remove from watchlist if it exists there
+      if (inWatchlist) {
+        setInWatchlist(false);
+        await supabase.from('watchlist').delete().eq('user_id', user.id).eq('movie_id', movieId);
+      }
     } else {
       await supabase.from('recently_watched').delete().eq('user_id', user.id).eq('movie_id', movieId);
     }
@@ -82,9 +88,7 @@ export default function MovieActions({ movieId, movieTitle, trailerUrl }: MovieA
     <div className="flex flex-wrap gap-4">
       {trailerUrl && (
         <a 
-          href={trailerUrl} 
-          target="_blank" 
-          rel="noreferrer"
+          href="#trailer" 
           className="px-6 py-3 bg-primary text-canvas font-semibold rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2"
         >
           <Play className="w-5 h-5 fill-canvas" /> Watch Trailer

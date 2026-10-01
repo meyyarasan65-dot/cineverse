@@ -9,9 +9,8 @@ interface HeroSectionProps {
 
 export default function HeroSection({ trendingMovies }: HeroSectionProps) {
   const { user, loading } = useAuthStore();
-
-  // Do not show the Hero section if the user is already logged in
-  if (user || loading) return null;
+  
+  if (loading) return <div className="w-full h-[70vh] bg-surface animate-pulse" />;
 
   // Use up to 4 backdrops for the collage
   const collageMovies = trendingMovies?.slice(0, 4) || [];
@@ -44,9 +43,15 @@ export default function HeroSection({ trendingMovies }: HeroSectionProps) {
           Track what you've watched, save what you want to see, and tell your friends what's good.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 mt-6 w-full sm:w-auto">
-          <Link href="/register" className="px-8 py-4 bg-primary text-canvas font-bold rounded-full hover:bg-primary/90 transition-transform hover:scale-105 flex items-center justify-center text-lg">
-            Start tracking free
-          </Link>
+          {!user ? (
+            <Link href="/register" className="px-8 py-4 bg-primary text-canvas font-bold rounded-full hover:bg-primary/90 transition-transform hover:scale-105 flex items-center justify-center text-lg">
+              Start tracking free
+            </Link>
+          ) : (
+            <Link href="/profile" className="px-8 py-4 bg-primary text-canvas font-bold rounded-full hover:bg-primary/90 transition-transform hover:scale-105 flex items-center justify-center text-lg">
+              View your diary
+            </Link>
+          )}
           <Link href="/trending" className="px-8 py-4 bg-surface border border-border-strong text-text-primary font-bold rounded-full hover:bg-surface/80 transition-colors flex items-center justify-center text-lg">
             Browse movies
           </Link>

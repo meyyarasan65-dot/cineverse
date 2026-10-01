@@ -19,6 +19,10 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
   const releaseYear = movie.release_date?.split('-')[0] || movie.first_air_date?.split('-')[0];
   const trailer = movie.videos?.results?.find((v: any) => v.type === 'Trailer' && v.site === 'YouTube');
   
+  // Get streaming providers (prefer US, then IN, then fallback)
+  const providersData = movie['watch/providers']?.results || {};
+  const streamingProviders = providersData?.US?.flatrate || providersData?.IN?.flatrate || (Object.values(providersData)[0] as any)?.flatrate || [];
+  
   return (
     <div className="flex flex-col w-full bg-canvas min-h-screen">
       {/* Backdrop Hero */}
@@ -89,6 +93,34 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                 </span>
               ))}
             </div>
+
+            {/* Streaming Providers */}
+            <div className="mt-4 flex flex-col gap-2">
+              <span className="text-sm font-semibold text-text-muted uppercase tracking-wider">
+                {streamingProviders.length > 0 ? 'Streaming on' : 'Available'}
+              </span>
+              <div className="flex gap-3 flex-wrap items-center">
+                {streamingProviders.length > 0 ? (
+                  streamingProviders.map((provider: any) => (
+                    <div key={provider.provider_id} className="group relative w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-border-subtle">
+                      <Image 
+                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                        alt={provider.provider_name}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-surface px-2 py-1 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                        {provider.provider_name}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <span className="text-sm text-text-primary bg-surface px-4 py-2 rounded-lg border border-border-subtle shadow-sm font-medium">
+                    Only in theatres
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -101,6 +133,22 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
           trailerUrl={trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : undefined} 
         />
 
+
+        {/* Trailer */}
+        {trailer && (
+          <div id="trailer" className="scroll-mt-24 w-full max-w-4xl">
+            <h2 className="text-2xl font-semibold mb-4 border-l-4 border-primary pl-3">Official Trailer</h2>
+            <div className="relative w-full rounded-xl overflow-hidden shadow-2xl border border-border-subtle bg-black pt-[56.25%]">
+              <iframe
+                src={`https://www.youtube.com/embed/${trailer.key}?rel=0`}
+                title="Trailer"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute top-0 left-0 w-full h-full border-0"
+              ></iframe>
+            </div>
+          </div>
+        )}
 
         {/* Cast */}
         {movie.credits?.cast && movie.credits.cast.length > 0 && (

@@ -29,7 +29,7 @@ export async function getTrendingMovies(timeWindow: 'day' | 'week' = 'week') {
 }
 
 export async function getMovie(id: string) {
-  return fetchFromTMDB(`/movie/${id}?append_to_response=credits,videos,similar`);
+  return fetchFromTMDB(`/movie/${id}?append_to_response=credits,videos,similar,watch/providers`);
 }
 
 export async function getGenres() {
