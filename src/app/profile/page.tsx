@@ -148,12 +148,20 @@ export default function ProfilePage() {
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 bg-surface p-8 rounded-xl border border-border-subtle">
         <div className="flex items-center gap-6">
-          <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center text-primary border border-primary/30 shrink-0">
-            <Film className="w-10 h-10" />
+          <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center text-primary border border-primary/30 shrink-0 overflow-hidden">
+            {(user.user_metadata?.avatar_url || user.user_metadata?.picture) ? (
+              <img
+                src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
+                alt={user.user_metadata?.username || user.user_metadata?.full_name || "Profile"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Film className="w-10 h-10" />
+            )}
           </div>
           <div>
             <h1 className="text-3xl font-bold text-text-primary">
-              {user.user_metadata?.username || user.email?.split('@')[0]}
+              {user.user_metadata?.username || user.user_metadata?.full_name || user.email?.split('@')[0]}
             </h1>
             <p className="text-text-muted mt-1">{user.email}</p>
             <div className="flex gap-4 mt-3 text-sm text-text-primary">

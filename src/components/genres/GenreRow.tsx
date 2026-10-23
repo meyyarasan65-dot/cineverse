@@ -15,7 +15,7 @@ export default async function GenreRow({ genreId, genreName }: GenreRowProps) {
   if (movies.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-4 py-6 border-b border-border-subtle/50 last:border-0 relative">
+    <div id={`genre-${genreId}`} className="flex flex-col gap-4 py-6 border-b border-border-subtle/50 last:border-0 relative scroll-mt-24">
       <div className="flex items-center justify-between px-2">
         <h2 className="text-2xl font-bold text-text-primary capitalize tracking-tight">
           {genreName}

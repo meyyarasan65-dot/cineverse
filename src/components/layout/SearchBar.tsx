@@ -83,7 +83,7 @@ export default function SearchBar() {
     <div ref={wrapperRef} className="relative z-50 w-full md:w-auto">
       <form
         onSubmit={handleSubmit}
-        className="flex items-center bg-surface border border-border-subtle rounded-full px-3 py-1.5 focus-within:border-primary transition-colors"
+        className="flex items-center bg-canvas/60 border border-white/10 rounded-full px-3.5 py-1.5 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)] transition-all"
       >
         <Search className="w-4 h-4 text-text-muted" />
         <input
@@ -101,7 +101,7 @@ export default function SearchBar() {
 
       {/* Recommendations Dropdown */}
       {isFocused && query.trim().length > 0 && (
-        <div className="absolute top-full mt-2 left-0 w-full bg-surface border border-border-subtle rounded-lg shadow-xl overflow-hidden py-2 text-sm">
+        <div className="absolute top-full mt-2.5 left-0 w-full sm:w-80 bg-surface/95 backdrop-blur-2xl border-t border-l border-r border-white/20 border-b-2 border-black/40 rounded-2xl shadow-[0_20px_40px_-5px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.15)] overflow-hidden py-2 text-sm">
           {loading ? (
             <div className="flex justify-center py-4">
               <Loader2 className="w-5 h-5 animate-spin text-primary" />
