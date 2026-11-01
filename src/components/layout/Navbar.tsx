@@ -30,14 +30,13 @@ export default function Navbar() {
   return (
     <>
       {/* =========================================================================
-          1. DESKTOP 3D FLOATING NAVIGATION BAR (Visible on md and up)
+          1. DESKTOP FLOATING NAVIGATION BAR (Visible on md and up)
       ========================================================================== */}
       <header className="hidden md:block sticky top-2 sm:top-3.5 z-50 w-full px-4 sm:px-6 pointer-events-none transition-all duration-300">
-        <nav className="pointer-events-auto max-w-7xl mx-auto h-[68px] px-6 flex items-center justify-between rounded-[26px] bg-surface/85 backdrop-blur-2xl border-t border-l border-r border-white/25 dark:border-white/15 border-b-2 border-black/35 dark:border-black/50 shadow-[0_16px_36px_-6px_rgba(0,0,0,0.5),0_6px_16px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.35)] relative">
+        <nav className="pointer-events-auto max-w-7xl mx-auto h-[68px] px-6 flex items-center justify-between rounded-[26px] bg-surface/85 backdrop-blur-2xl border border-border-subtle shadow-[0_12px_36px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_36px_-6px_rgba(0,0,0,0.5),0_6px_16px_rgba(0,0,0,0.35)] relative">
           
-          {/* Specular 3D Rim Highlight Lines */}
-          <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none rounded-full" />
-          <div className="absolute bottom-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-black/40 to-transparent pointer-events-none rounded-full" />
+          {/* Specular Rim Highlight Line */}
+          <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/30 to-transparent pointer-events-none rounded-full" />
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5 hover:opacity-90 transition-all group shrink-0">
@@ -54,8 +53,8 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop 3D Navigation Links */}
-          <div className="flex items-center gap-1 p-1 rounded-2xl bg-canvas/40 border border-white/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)]">
+          {/* Desktop Navigation Links */}
+          <div className="flex items-center gap-1 p-1 rounded-2xl bg-canvas/60 border border-border-subtle shadow-inner">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               return (
@@ -64,8 +63,8 @@ export default function Navbar() {
                   href={link.href}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 relative ${
                     isActive
-                      ? "text-primary bg-primary/15 border border-primary/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_10px_rgba(0,224,84,0.3)]"
-                      : "text-text-muted hover:text-text-primary hover:bg-white/5 border border-transparent"
+                      ? "text-primary bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_10px_rgba(0,224,84,0.3)]"
+                      : "text-text-muted hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
                   }`}
                 >
                   {link.label}
@@ -78,7 +77,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <SearchBar />
             
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-canvas/30 border border-white/5 shadow-inner">
+            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-canvas/60 border border-border-subtle shadow-inner">
               <ThemeToggle />
               <NotificationsPanel />
             </div>
@@ -88,7 +87,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <Link 
                     href="/profile" 
-                    className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-canvas/50 border border-border-subtle/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_2px_6px_rgba(0,0,0,0.2)] hover:border-primary/40 transition-all text-sm font-medium text-text-muted hover:text-primary group"
+                    className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-canvas/70 border border-border-subtle shadow-sm hover:border-primary/50 transition-all text-sm font-medium text-text-muted hover:text-primary group"
                   >
                     {avatarUrl ? (
                       <img 
@@ -106,7 +105,7 @@ export default function Navbar() {
 
                   <button 
                     onClick={handleLogout}
-                    className="p-2 rounded-xl text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer" 
+                    className="p-2 rounded-xl text-text-muted hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer" 
                     aria-label="Logout"
                   >
                     <LogOut className="w-4 h-4" />
@@ -116,13 +115,13 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <Link 
                     href="/login" 
-                    className="px-3.5 py-1.5 text-sm font-semibold text-text-primary hover:text-primary transition-colors rounded-xl hover:bg-white/5"
+                    className="px-3.5 py-1.5 text-sm font-semibold text-text-primary hover:text-primary transition-colors rounded-xl hover:bg-black/5 dark:hover:bg-white/5"
                   >
                     Log In
                   </Link>
                   <Link 
                     href="/register" 
-                    className="px-4 py-2 bg-gradient-to-b from-[#00f75e] to-[#00b843] text-canvas text-sm font-bold rounded-xl shadow-[0_4px_14px_rgba(0,224,84,0.35),inset_0_1px_1px_rgba(255,255,255,0.4),inset_0_-2px_2px_rgba(0,0,0,0.3)] hover:brightness-110 active:scale-[0.98] transition-all"
+                    className="px-4 py-2 bg-gradient-to-b from-[#00f75e] to-[#00b843] text-canvas text-sm font-bold rounded-xl shadow-[0_4px_14px_rgba(0,224,84,0.35)] hover:brightness-110 active:scale-[0.98] transition-all"
                   >
                     Sign Up
                   </Link>
@@ -137,10 +136,10 @@ export default function Navbar() {
           2. MOBILE CLEAN PILL-STYLED TOP HEADER (Visible on < md)
       ========================================================================== */}
       <header className="md:hidden sticky top-2 z-40 w-full px-3 pointer-events-none transition-all duration-300">
-        <nav className="pointer-events-auto mx-auto max-w-md h-13 px-3.5 flex items-center justify-between rounded-full bg-surface/90 dark:bg-[#121815]/90 backdrop-blur-2xl border-t border-l border-r border-white/25 dark:border-white/15 border-b-2 border-black/35 dark:border-black/50 shadow-[0_10px_28px_-4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] relative">
+        <nav className="pointer-events-auto mx-auto max-w-md h-13 px-3.5 flex items-center justify-between rounded-full bg-surface/90 backdrop-blur-2xl border border-border-subtle shadow-[0_8px_24px_-4px_rgba(0,0,0,0.08),0_2px_6px_rgba(0,0,0,0.04)] dark:shadow-[0_12px_28px_-4px_rgba(0,0,0,0.6)] relative">
           
           {/* Subtle Top Specular Rim */}
-          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none rounded-full" />
+          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/25 to-transparent pointer-events-none rounded-full" />
 
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-1.5 hover:opacity-90 transition-opacity">
@@ -182,7 +181,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/login"
-                  className="px-3 py-1 rounded-full text-xs font-bold text-text-primary bg-canvas/60 border border-white/10 hover:border-primary/40 transition-all ml-0.5"
+                  className="px-3.5 py-1.5 rounded-full text-xs font-bold text-text-primary bg-canvas border border-border-subtle hover:border-primary/50 hover:text-primary transition-all ml-0.5 shadow-sm"
                 >
                   Log In
                 </Link>
@@ -199,17 +198,17 @@ export default function Navbar() {
         aria-label="Mobile Navigation"
         className="md:hidden fixed bottom-3 inset-x-3 max-w-md mx-auto z-50 pointer-events-auto"
       >
-        <div className="h-16 px-1.5 rounded-2xl sm:rounded-3xl bg-surface/92 dark:bg-[#101713]/94 backdrop-blur-2xl border-t border-l border-r border-white/20 dark:border-white/10 border-b-2 border-black/50 shadow-[0_16px_36px_rgba(0,0,0,0.65),0_2px_8px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-around relative">
+        <div className="h-16 px-1.5 rounded-2xl sm:rounded-3xl bg-surface/92 backdrop-blur-2xl border border-border-subtle shadow-[0_12px_36px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_16px_36px_rgba(0,0,0,0.65),0_2px_8px_rgba(0,0,0,0.35)] flex items-center justify-around relative">
           
           {/* Micro Top Specular Highlight */}
-          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none rounded-full" />
+          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/25 to-transparent pointer-events-none rounded-full" />
 
           {/* Tab 1: Home */}
           <Link
             href="/"
             className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
               pathname === "/"
-                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                ? "text-primary font-bold bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
                 : "text-text-muted hover:text-text-primary border border-transparent"
             }`}
           >
@@ -225,7 +224,7 @@ export default function Navbar() {
             href="/search"
             className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
               pathname.startsWith("/search")
-                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                ? "text-primary font-bold bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
                 : "text-text-muted hover:text-text-primary border border-transparent"
             }`}
           >
@@ -241,7 +240,7 @@ export default function Navbar() {
             href="/trending"
             className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
               pathname.startsWith("/trending")
-                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                ? "text-primary font-bold bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
                 : "text-text-muted hover:text-text-primary border border-transparent"
             }`}
           >
@@ -257,7 +256,7 @@ export default function Navbar() {
             href="/genres"
             className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
               pathname.startsWith("/genres")
-                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                ? "text-primary font-bold bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
                 : "text-text-muted hover:text-text-primary border border-transparent"
             }`}
           >
@@ -273,7 +272,7 @@ export default function Navbar() {
             href={user ? "/profile" : "/login"}
             className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
               pathname.startsWith("/profile") || pathname.startsWith("/login") || pathname.startsWith("/register")
-                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                ? "text-primary font-bold bg-primary/12 border border-primary/25 shadow-[0_2px_8px_rgba(0,200,83,0.15)] dark:shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
                 : "text-text-muted hover:text-text-primary border border-transparent"
             }`}
           >
@@ -301,14 +300,14 @@ export default function Navbar() {
           4. LOGOUT CONFIRMATION MODAL
       ========================================================================== */}
       {showLogoutModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-          <div className="bg-surface border-t border-l border-r border-white/20 border-b-2 border-black/40 rounded-2xl p-6 w-full max-w-sm shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 dark:bg-black/70 backdrop-blur-md p-4">
+          <div className="bg-surface border border-border-subtle rounded-2xl p-6 w-full max-w-sm shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
             <h3 className="text-xl font-bold text-text-primary">Confirm Logout</h3>
             <p className="text-text-muted text-sm leading-relaxed">Are you sure you want to log out of your account?</p>
             <div className="flex justify-end gap-3 mt-3">
               <button 
                 onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 text-sm font-semibold text-text-primary bg-canvas/60 border border-border-subtle rounded-xl hover:bg-canvas transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm font-semibold text-text-primary bg-canvas/80 border border-border-subtle rounded-xl hover:bg-canvas transition-colors cursor-pointer"
               >
                 Cancel
               </button>

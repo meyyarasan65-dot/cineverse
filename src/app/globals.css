@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+.dark {
   /* Default Dark Mode Variables */
   --canvas: #121417;
   --surface: #1A1D23;
@@ -8,6 +9,11 @@
   --text-primary: #F8F9FA;
   --text-muted: #9CA3AF;
   --border-subtle: #2D3748;
+
+  /* Ambient Pattern Colors */
+  --pattern-dot: rgba(255, 255, 255, 0.065);
+  --glow-primary: rgba(0, 224, 84, 0.08);
+  --glow-secondary: rgba(2, 212, 80, 0.04);
 }
 
 .light {
@@ -18,6 +24,11 @@
   --text-primary: #1A1D23;
   --text-muted: #6B7280;
   --border-subtle: #E5E7EB;
+
+  /* Ambient Pattern Colors */
+  --pattern-dot: rgba(0, 0, 0, 0.06);
+  --glow-primary: rgba(0, 200, 83, 0.065);
+  --glow-secondary: rgba(0, 180, 70, 0.03);
 }
 
 @theme inline {
@@ -45,6 +56,55 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* =========================================================================
+   Cinema Background Ambient Pattern Layer
+========================================================================= */
+.cinema-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Subtle Geometric Micro-Dot Grid */
+.cinema-pattern-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--pattern-dot) 1.25px, transparent 1.25px);
+  background-size: 26px 26px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 95% 85% at 50% 15%, #000 45%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 15%, #000 45%, transparent 95%);
+}
+
+/* Subtle Ambient Glows for Depth & Rich Atmosphere */
+.cinema-pattern-glow-top {
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  max-width: 100vw;
+  height: 440px;
+  background: radial-gradient(ellipse at center, var(--glow-primary) 0%, transparent 70%);
+  filter: blur(65px);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.cinema-pattern-glow-bottom {
+  position: absolute;
+  bottom: -160px;
+  right: -80px;
+  width: 550px;
+  height: 380px;
+  background: radial-gradient(ellipse at center, var(--glow-secondary) 0%, transparent 70%);
+  filter: blur(75px);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
 /* Hide scrollbar for elements with hide-scrollbar class */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
@@ -62,4 +122,3 @@ body {
     width: 100%;
   }
 }
-
