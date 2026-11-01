@@ -21,10 +21,11 @@ export default function RegisterPage() {
     setSuccess(false);
     
     // Supabase auth
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
         data: {
           username: username,
         }
@@ -33,6 +34,10 @@ export default function RegisterPage() {
 
     if (signUpError) {
       setError(signUpError.message);
+    } else if (data?.session) {
+      // If email confirmation is disabled in Supabase, sign-in is instant
+      window.location.href = '/';
+      return;
     } else {
       setSuccess(true);
     }
@@ -70,7 +75,10 @@ export default function RegisterPage() {
           <div className="flex flex-col items-center gap-4 text-center">
             <div className="w-16 h-16 bg-primary/20 text-primary rounded-full flex items-center justify-center text-2xl font-bold">✓</div>
             <h2 className="text-xl font-semibold text-text-primary">Check your email!</h2>
-            <p className="text-text-muted text-sm">We've sent a confirmation link to {email}.</p>
+            <p className="text-text-muted text-sm">We've sent a confirmation link to <span className="font-semibold text-text-primary">{email}</span>.</p>
+            <p className="text-xs text-text-muted">
+              Didn't see it? Please check your <strong>Spam / Junk</strong> folder or promotions tab.
+            </p>
             <Link href="/login" className="mt-4 text-primary hover:underline font-medium">
               Return to login
             </Link>

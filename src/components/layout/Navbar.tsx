@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Film, User, LogOut, Menu, X, Sparkles } from "lucide-react";
+import { Film, User, LogOut, Home, Search, Flame } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import SearchBar from "@/components/layout/SearchBar";
 import NotificationsPanel from "@/components/layout/NotificationsPanel";
@@ -12,7 +12,6 @@ import ThemeToggle from "@/components/layout/ThemeToggle";
 export default function Navbar() {
   const pathname = usePathname();
   const { user, loading, signOut } = useAuthStore();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
@@ -30,11 +29,11 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Floating 3D Navigation Bar Outer Wrapper */}
-      <header className="sticky top-2 sm:top-3.5 z-50 w-full px-3 sm:px-6 pointer-events-none transition-all duration-300">
-        
-        {/* Curved 3D Capsule */}
-        <nav className="pointer-events-auto max-w-7xl mx-auto h-16 sm:h-[68px] px-3.5 sm:px-6 flex items-center justify-between rounded-2xl md:rounded-[26px] bg-surface/85 backdrop-blur-2xl border-t border-l border-r border-white/25 dark:border-white/15 border-b-2 border-black/35 dark:border-black/50 shadow-[0_16px_36px_-6px_rgba(0,0,0,0.5),0_6px_16px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.35)] relative">
+      {/* =========================================================================
+          1. DESKTOP 3D FLOATING NAVIGATION BAR (Visible on md and up)
+      ========================================================================== */}
+      <header className="hidden md:block sticky top-2 sm:top-3.5 z-50 w-full px-4 sm:px-6 pointer-events-none transition-all duration-300">
+        <nav className="pointer-events-auto max-w-7xl mx-auto h-[68px] px-6 flex items-center justify-between rounded-[26px] bg-surface/85 backdrop-blur-2xl border-t border-l border-r border-white/25 dark:border-white/15 border-b-2 border-black/35 dark:border-black/50 shadow-[0_16px_36px_-6px_rgba(0,0,0,0.5),0_6px_16px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.35)] relative">
           
           {/* Specular 3D Rim Highlight Lines */}
           <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none rounded-full" />
@@ -46,17 +45,17 @@ export default function Navbar() {
               <img 
                 src="/logo.png" 
                 alt="Frame Diary Logo" 
-                className="w-11 h-11 sm:w-13 sm:h-13 object-contain [clip-path:circle(48%_at_50%_50%)] drop-shadow-[0_2px_8px_rgba(0,224,84,0.35)] transition-transform group-hover:scale-105" 
+                className="w-12 h-12 object-contain [clip-path:circle(48%_at_50%_50%)] drop-shadow-[0_2px_8px_rgba(0,224,84,0.35)] transition-transform group-hover:scale-105" 
               />
             </div>
-            <span className="font-extrabold text-xl sm:text-2xl tracking-tight leading-none flex items-center -translate-y-[2px]">
+            <span className="font-extrabold text-2xl tracking-tight leading-none flex items-center -translate-y-[2px]">
               <span className="text-text-primary drop-shadow-sm">FRAME</span>
               <span className="text-[#02d450] drop-shadow-[0_0_12px_rgba(2,212,80,0.4)]">DIARY</span>
             </span>
           </Link>
 
           {/* Desktop 3D Navigation Links */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-2xl bg-canvas/40 border border-white/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)]">
+          <div className="flex items-center gap-1 p-1 rounded-2xl bg-canvas/40 border border-white/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)]">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               return (
@@ -76,10 +75,8 @@ export default function Navbar() {
           </div>
 
           {/* Right Section: Search & Auth/Profile */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden sm:block">
-              <SearchBar />
-            </div>
+          <div className="flex items-center gap-3">
+            <SearchBar />
             
             <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-canvas/30 border border-white/5 shadow-inner">
               <ThemeToggle />
@@ -88,7 +85,7 @@ export default function Navbar() {
             
             {!loading && (
               user ? (
-                <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Link 
                     href="/profile" 
                     className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-canvas/50 border border-border-subtle/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_2px_6px_rgba(0,0,0,0.2)] hover:border-primary/40 transition-all text-sm font-medium text-text-muted hover:text-primary group"
@@ -109,14 +106,14 @@ export default function Navbar() {
 
                   <button 
                     onClick={handleLogout}
-                    className="p-2 rounded-xl text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors" 
+                    className="p-2 rounded-xl text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer" 
                     aria-label="Logout"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
-                <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Link 
                     href="/login" 
                     className="px-3.5 py-1.5 text-sm font-semibold text-text-primary hover:text-primary transition-colors rounded-xl hover:bg-white/5"
@@ -132,97 +129,177 @@ export default function Navbar() {
                 </div>
               )
             )}
-
-            {/* Mobile Menu Button */}
-            <button 
-              aria-label="Menu" 
-              className="md:hidden p-2 rounded-xl bg-canvas/40 border border-white/10 text-text-muted hover:text-primary hover:border-primary/30 transition-all"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </nav>
+      </header>
 
-        {/* Mobile Navigation Dropdown - 3D Curved Panel */}
-        {isMobileMenuOpen && (
-          <div className="pointer-events-auto max-w-7xl mx-auto mt-2.5 rounded-2xl bg-surface/95 backdrop-blur-2xl border-t border-l border-r border-white/20 border-b-2 border-black/40 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.15)] p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="sm:hidden w-full">
-              <SearchBar />
-            </div>
+      {/* =========================================================================
+          2. MOBILE CLEAN PILL-STYLED TOP HEADER (Visible on < md)
+      ========================================================================== */}
+      <header className="md:hidden sticky top-2 z-40 w-full px-3 pointer-events-none transition-all duration-300">
+        <nav className="pointer-events-auto mx-auto max-w-md h-13 px-3.5 flex items-center justify-between rounded-full bg-surface/90 dark:bg-[#121815]/90 backdrop-blur-2xl border-t border-l border-r border-white/25 dark:border-white/15 border-b-2 border-black/35 dark:border-black/50 shadow-[0_10px_28px_-4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] relative">
+          
+          {/* Subtle Top Specular Rim */}
+          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none rounded-full" />
 
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                      isActive
-                        ? "text-primary bg-primary/15 border border-primary/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]"
-                        : "text-text-primary hover:bg-white/5"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-            
-            <div className="border-t border-white/10 my-1"></div>
-            
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center gap-1.5 hover:opacity-90 transition-opacity">
+            <img 
+              src="/logo.png" 
+              alt="Frame Diary Logo" 
+              className="w-8 h-8 object-contain [clip-path:circle(48%_at_50%_50%)] drop-shadow-[0_2px_6px_rgba(0,224,84,0.35)]" 
+            />
+            <span className="font-extrabold text-base tracking-tight leading-none flex items-center -translate-y-[1px]">
+              <span className="text-text-primary">FRAME</span>
+              <span className="text-[#02d450] drop-shadow-[0_0_8px_rgba(2,212,80,0.4)]">DIARY</span>
+            </span>
+          </Link>
+
+          {/* Quick Header Controls (Theme, Notifications, Profile / Login) */}
+          <div className="flex items-center gap-1.5">
+            <ThemeToggle />
+            <NotificationsPanel />
+
             {!loading && (
               user ? (
-                <div className="flex flex-col gap-2">
-                  <Link 
-                    href="/profile" 
-                    onClick={() => setIsMobileMenuOpen(false)} 
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-canvas/50 border border-border-subtle text-sm font-semibold text-text-primary hover:text-primary transition-colors"
-                  >
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt={displayName} className="w-7 h-7 rounded-full object-cover border border-primary/40 shrink-0" />
-                    ) : (
-                      <User className="w-5 h-5 text-primary" />
-                    )}
-                    <span className="truncate">{displayName}</span>
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      handleLogout();
-                    }}
-                    className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-colors text-left" 
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Log Out</span>
-                  </button>
-                </div>
+                <Link
+                  href="/profile"
+                  className="p-0.5 rounded-full hover:ring-2 hover:ring-primary/40 transition-all ml-0.5"
+                  aria-label="Profile"
+                >
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt={displayName}
+                      className="w-7 h-7 rounded-full object-cover border border-primary/50"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary">
+                      <User className="w-3.5 h-3.5" />
+                    </div>
+                  )}
+                </Link>
               ) : (
-                <div className="flex flex-col gap-2 pt-1">
-                  <Link 
-                    href="/login" 
-                    onClick={() => setIsMobileMenuOpen(false)} 
-                    className="w-full text-center py-2.5 rounded-xl text-sm font-semibold text-text-primary bg-canvas/60 border border-white/10 hover:bg-white/10 transition-colors"
-                  >
-                    Log In
-                  </Link>
-                  <Link 
-                    href="/register" 
-                    onClick={() => setIsMobileMenuOpen(false)} 
-                    className="w-full text-center py-2.5 rounded-xl text-sm font-bold text-canvas bg-gradient-to-b from-[#00f75e] to-[#00b843] shadow-[0_4px_14px_rgba(0,224,84,0.35)] hover:brightness-110 transition-all"
-                  >
-                    Create Account
-                  </Link>
-                </div>
+                <Link
+                  href="/login"
+                  className="px-3 py-1 rounded-full text-xs font-bold text-text-primary bg-canvas/60 border border-white/10 hover:border-primary/40 transition-all ml-0.5"
+                >
+                  Log In
+                </Link>
               )
             )}
           </div>
-        )}
+        </nav>
       </header>
-      
-      {/* Logout Confirmation Modal */}
+
+      {/* =========================================================================
+          3. MOBILE FIXED APP-STYLE BOTTOM TAB BAR (Visible on < md)
+      ========================================================================== */}
+      <nav
+        aria-label="Mobile Navigation"
+        className="md:hidden fixed bottom-3 inset-x-3 max-w-md mx-auto z-50 pointer-events-auto"
+      >
+        <div className="h-16 px-1.5 rounded-2xl sm:rounded-3xl bg-surface/92 dark:bg-[#101713]/94 backdrop-blur-2xl border-t border-l border-r border-white/20 dark:border-white/10 border-b-2 border-black/50 shadow-[0_16px_36px_rgba(0,0,0,0.65),0_2px_8px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-around relative">
+          
+          {/* Micro Top Specular Highlight */}
+          <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none rounded-full" />
+
+          {/* Tab 1: Home */}
+          <Link
+            href="/"
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
+              pathname === "/"
+                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                : "text-text-muted hover:text-text-primary border border-transparent"
+            }`}
+          >
+            {pathname === "/" && (
+              <span className="absolute top-1 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_#02d450]" />
+            )}
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] sm:text-[11px] leading-tight mt-0.5">Home</span>
+          </Link>
+
+          {/* Tab 2: Search (Opens /search with trending movies or search results) */}
+          <Link
+            href="/search"
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
+              pathname.startsWith("/search")
+                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                : "text-text-muted hover:text-text-primary border border-transparent"
+            }`}
+          >
+            {pathname.startsWith("/search") && (
+              <span className="absolute top-1 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_#02d450]" />
+            )}
+            <Search className="w-5 h-5" />
+            <span className="text-[10px] sm:text-[11px] leading-tight mt-0.5">Search</span>
+          </Link>
+
+          {/* Tab 3: Trending */}
+          <Link
+            href="/trending"
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
+              pathname.startsWith("/trending")
+                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                : "text-text-muted hover:text-text-primary border border-transparent"
+            }`}
+          >
+            {pathname.startsWith("/trending") && (
+              <span className="absolute top-1 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_#02d450]" />
+            )}
+            <Flame className="w-5 h-5" />
+            <span className="text-[10px] sm:text-[11px] leading-tight mt-0.5">Trending</span>
+          </Link>
+
+          {/* Tab 4: Genres */}
+          <Link
+            href="/genres"
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
+              pathname.startsWith("/genres")
+                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                : "text-text-muted hover:text-text-primary border border-transparent"
+            }`}
+          >
+            {pathname.startsWith("/genres") && (
+              <span className="absolute top-1 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_#02d450]" />
+            )}
+            <Film className="w-5 h-5" />
+            <span className="text-[10px] sm:text-[11px] leading-tight mt-0.5">Genres</span>
+          </Link>
+
+          {/* Tab 5: Profile / Login */}
+          <Link
+            href={user ? "/profile" : "/login"}
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all duration-200 relative ${
+              pathname.startsWith("/profile") || pathname.startsWith("/login") || pathname.startsWith("/register")
+                ? "text-primary font-bold bg-primary/15 border border-primary/25 shadow-[0_2px_8px_rgba(0,224,84,0.2)]"
+                : "text-text-muted hover:text-text-primary border border-transparent"
+            }`}
+          >
+            {(pathname.startsWith("/profile") || pathname.startsWith("/login") || pathname.startsWith("/register")) && (
+              <span className="absolute top-1 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_#02d450]" />
+            )}
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt="Profile"
+                className="w-5 h-5 rounded-full object-cover border border-primary/50"
+              />
+            ) : (
+              <User className="w-5 h-5" />
+            )}
+            <span className="text-[10px] sm:text-[11px] leading-tight mt-0.5 truncate max-w-[54px]">
+              {user ? "Profile" : "Log In"}
+            </span>
+          </Link>
+
+        </div>
+      </nav>
+
+      {/* =========================================================================
+          4. LOGOUT CONFIRMATION MODAL
+      ========================================================================== */}
       {showLogoutModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
           <div className="bg-surface border-t border-l border-r border-white/20 border-b-2 border-black/40 rounded-2xl p-6 w-full max-w-sm shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
@@ -231,7 +308,7 @@ export default function Navbar() {
             <div className="flex justify-end gap-3 mt-3">
               <button 
                 onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 text-sm font-semibold text-text-primary bg-canvas/60 border border-border-subtle rounded-xl hover:bg-canvas transition-colors"
+                className="px-4 py-2 text-sm font-semibold text-text-primary bg-canvas/60 border border-border-subtle rounded-xl hover:bg-canvas transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -240,7 +317,7 @@ export default function Navbar() {
                   setShowLogoutModal(false);
                   await signOut();
                 }}
-                className="px-4 py-2 text-sm font-semibold text-canvas bg-red-500 rounded-xl hover:bg-red-600 shadow-[0_4px_12px_rgba(239,68,68,0.35)] transition-colors flex items-center gap-2"
+                className="px-4 py-2 text-sm font-semibold text-canvas bg-red-500 rounded-xl hover:bg-red-600 shadow-[0_4px_12px_rgba(239,68,68,0.35)] transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 Log Out

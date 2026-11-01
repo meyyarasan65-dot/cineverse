@@ -9,16 +9,22 @@ export async function fetchFromTMDB(endpoint: string, options?: RequestInit) {
   const separator = endpoint.includes('?') ? '&' : '?';
   const url = `${TMDB_BASE_URL}${endpoint}${separator}api_key=${apiKey}`;
 
-  const res = await fetch(url, {
-    ...options,
-    next: { revalidate: 3600, ...options?.next }, // Cache for 1 hour by default
-  });
+  try {
+    const res = await fetch(url, {
+      ...options,
+      next: { revalidate: 3600, ...options?.next }, // Cache for 1 hour by default
+    });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch from TMDB: ${res.statusText}`);
+    if (!res.ok) {
+      console.warn(`TMDB response error [${res.status}]: ${res.statusText}`);
+      return { results: [] };
+    }
+
+    return res.json();
+  } catch (err) {
+    console.warn(`TMDB fetch failed for ${endpoint}:`, err);
+    return { results: [] };
   }
-
-  return res.json();
 }
 
 export async function getTrendingMovies(timeWindow: 'day' | 'week' = 'week') {

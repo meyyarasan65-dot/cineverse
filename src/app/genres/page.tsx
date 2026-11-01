@@ -20,12 +20,19 @@ function GenreRowSkeleton() {
 }
 
 export default async function GenresPage() {
-  const [genresData, featuredData] = await Promise.all([
-    getGenres(),
-    fetchFromTMDB("/discover/movie?sort_by=popularity.desc&vote_count.gte=200"),
-  ]);
+  let genres: any[] = [];
+  let featuredResults: any[] = [];
 
-  const genres = genresData.genres || [];
+  try {
+    const [genresData, featuredData] = await Promise.all([
+      getGenres(),
+      fetchFromTMDB("/discover/movie?sort_by=popularity.desc&vote_count.gte=200"),
+    ]);
+    genres = genresData.genres || [];
+    featuredResults = featuredData.results || [];
+  } catch (error) {
+    console.error("Failed to fetch genres:", error);
+  }
   
   // Build a lookup map of genre id -> genre name
   const genresMap: Record<number, string> = {};
@@ -34,7 +41,7 @@ export default async function GenresPage() {
   });
 
   // Filter top movies with backdrop for the hero carousel
-  const heroMovies = (featuredData.results || [])
+  const heroMovies = featuredResults
     .filter((movie: any) => Boolean(movie.backdrop_path))
     .slice(0, 8);
 

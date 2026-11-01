@@ -5,10 +5,15 @@ import { Calendar, Clock } from "lucide-react";
 
 export default async function ComingSoonPage() {
   const today = new Date().toISOString().split("T")[0];
-  const data = await fetchFromTMDB(
-    `/discover/movie?primary_release_date.gte=${today}&sort_by=popularity.desc`
-  );
-  const movies = data.results || [];
+  let movies: any[] = [];
+  try {
+    const data = await fetchFromTMDB(
+      `/discover/movie?primary_release_date.gte=${today}&sort_by=popularity.desc`
+    );
+    movies = data.results || [];
+  } catch (error) {
+    console.error("Failed to fetch coming soon movies:", error);
+  }
 
   // Filter top upcoming movies with backdrop for the hero carousel
   const heroMovies = movies
