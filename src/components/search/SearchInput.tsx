@@ -43,22 +43,22 @@ export default function SearchInput({ initialQuery = "" }: SearchInputProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col gap-3">
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-2 sm:gap-3">
       {/* Search Bar Capsule */}
       <form
         onSubmit={handleSubmit}
-        className="relative flex items-center w-full bg-surface/90 backdrop-blur-xl border border-white/15 dark:border-white/10 rounded-2xl sm:rounded-full p-2 shadow-[0_8px_30px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)] focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/25 transition-all"
+        className="relative flex items-center w-full bg-surface/90 backdrop-blur-xl border border-border-subtle rounded-full p-1 sm:p-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all"
       >
-        <div className="pl-3 pr-2 text-primary flex items-center justify-center shrink-0">
-          <Search className="w-5 h-5 sm:w-6 sm:h-6" />
+        <div className="pl-2.5 sm:pl-3 pr-1.5 sm:pr-2 text-primary flex items-center justify-center shrink-0">
+          <Search className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
 
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search movies by title, director, keyword..."
-          className="w-full bg-transparent border-none outline-none text-base text-text-primary placeholder:text-text-muted px-2 py-1.5 sm:py-2"
+          placeholder="Search movies, genres, actors..."
+          className="w-full bg-transparent border-none outline-none text-sm sm:text-base text-text-primary placeholder:text-text-muted px-1 sm:px-2 py-1 sm:py-1.5 min-w-0"
           autoFocus={false}
         />
 
@@ -66,36 +66,36 @@ export default function SearchInput({ initialQuery = "" }: SearchInputProps) {
           <button
             type="button"
             onClick={handleClear}
-            className="p-1.5 mr-1 text-text-muted hover:text-text-primary rounded-full hover:bg-white/10 transition-colors"
+            className="p-1 sm:p-1.5 mr-1 text-text-muted hover:text-text-primary rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
             aria-label="Clear search"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         )}
 
         <button
           type="submit"
-          className="px-4 sm:px-6 py-2 bg-gradient-to-r from-[#00f75e] to-[#00b843] text-canvas font-bold text-sm sm:text-base rounded-xl sm:rounded-full shadow-[0_4px_14px_rgba(0,224,84,0.35)] hover:brightness-110 active:scale-95 transition-all shrink-0 cursor-pointer"
+          className="px-3.5 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-[#00f75e] to-[#00b843] text-canvas font-bold text-xs sm:text-sm rounded-full shadow-[0_4px_14px_rgba(0,224,84,0.3)] hover:brightness-110 active:scale-95 transition-all shrink-0 cursor-pointer"
         >
           Search
         </button>
       </form>
 
       {/* Quick Suggestion Chips */}
-      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 px-1">
+      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar py-0.5 px-0.5 -mx-0.5">
         <button
           type="button"
           onClick={() => {
             setSearchTerm("");
             router.push("/search");
           }}
-          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
             !searchTerm
-              ? "bg-primary text-canvas shadow-[0_2px_8px_rgba(0,224,84,0.35)]"
-              : "bg-surface/80 text-text-muted hover:text-text-primary border border-white/10 hover:border-white/20"
+              ? "bg-primary text-canvas shadow-sm"
+              : "bg-surface/80 text-text-muted hover:text-text-primary border border-border-subtle hover:border-primary/40"
           }`}
         >
-          <Flame className="w-3.5 h-3.5" />
+          <Flame className="w-3 h-3" />
           <span>Trending</span>
         </button>
 
@@ -106,10 +106,10 @@ export default function SearchInput({ initialQuery = "" }: SearchInputProps) {
               key={item.label}
               type="button"
               onClick={() => handleSuggestionClick(item.query)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium shrink-0 transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-primary/20 text-primary border border-primary/40 font-semibold shadow-[0_2px_8px_rgba(0,224,84,0.25)]"
-                  : "bg-surface/80 text-text-muted hover:text-text-primary border border-white/10 hover:border-white/20"
+                  ? "bg-primary/15 text-primary border border-primary/30 font-semibold shadow-sm"
+                  : "bg-surface/80 text-text-muted hover:text-text-primary border border-border-subtle hover:border-primary/40"
               }`}
             >
               {item.label}
